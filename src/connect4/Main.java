@@ -7,7 +7,7 @@ public class Main {
 
         char[][] play = game.fillBoard();
 
-        game.play(play);
+        game.playGame();
 
     }
 }

@@ -15,7 +15,7 @@ public class Board {
         int col = board[0].length;
         int row = board.length;
 
-        for (int r = 0; r < row ; r++) {
+        for (int r = 0; r < row; r++) {
             for (int c = 0; c < col; c++) {
                 board[r][c] = '.';
             }
@@ -37,11 +37,11 @@ public class Board {
 
     /*
     Method column full
-    Method insert from below till find a empty space
+    Method inserts from below till find an empty space
      */
 
-    public boolean isFull (char[][] board, int column) {
-        for (int c = 0; c < board.length; c++ ){
+    public boolean isFull(char[][] board, int column) {
+        for (int c = 0; c < board.length; c++) {
             if (board[column][c] == '.') return false;
         }
         return true;
@@ -49,19 +49,16 @@ public class Board {
 
     public int returnLowest(char[][] board, int column) {
         int lowest = board[0].length;
-        for (int c = lowest; c > 0; c--){
-            if (board[c][column] == 'Y' || board[c][column] == 'R') {
-                lowest = c - 1;
+        if (!isFull(board, column)) {
+            for (int c = lowest; c > 0; c--) {
+                if (board[c][column] == 'Y' || board[c][column] == 'R') {
+                    lowest = c - 1;
+                }
             }
         }
         return lowest;
     }
 
-    /** Method to check it there are 4 in a row
-     * @param board
-     * @param player
-     * @return
-     * */
     public boolean checkWin(char[][] board, char player) {
         int col = board[0].length;
         int row = board.length;
@@ -140,59 +137,12 @@ public class Board {
         return false;
     }
 
-    public void makeTurn(char[][] board, char player) {
+    public boolean checkDraw(char[][] board) {
+        int col = board[0].length;
 
-        Scanner in = new Scanner(System.in);
-        System.out.print("Enter a column (1-6): ");
-        int nextTurn = in.nextInt() - 1;
-        isFull(board,nextTurn);
-        board[returnLowest(board,nextTurn)][nextTurn] = player;
-    }
-
-    /* public boolean checkWin(char[][] board) {
-        final int HEIGHT = board.length;
-        final int WIDTH = board[0].length;
-        final int EMPTY_SLOT = 0;
-        for (int r = 0; r < HEIGHT; r++) { // iterate rows, bottom to top
-            for (int c = 0; c < WIDTH; c++) { // iterate columns, left to right
-                char player = board[r][c];
-                if (player == EMPTY_SLOT)
-                    continue; // don't check empty slots
-
-                if (c + 3 < WIDTH &&
-                        player == board[r][c+1] && // look right
-                        player == board[r][c+2] &&
-                        player == board[r][c+3])
-                    return true;
-                if (r + 3 < HEIGHT) {
-                    if (player == board[r+1][c] && // look up
-                            player == board[r+2][c] &&
-                            player == board[r+3][c])
-                        return true;
-                    if (c + 3 < WIDTH &&
-                            player == board[r+1][c+1] && // look up & right
-                            player == board[r+2][c+2] &&
-                            player == board[r+3][c+3])
-                        return true;
-                    if (c - 3 >= 0 &&
-                            player == board[r+1][c-1] && // look up & left
-                            player == board[r+2][c-2] &&
-                            player == board[r+3][c-3])
-                        return true;
-                }
-            }
-        }
-        return false; // no winner found
-    } */
-
-
-    /** Method to check if board is full */
-    public boolean checkFull(char[][] board) {
-        int row = board[0].length;
-
-        for (int r = 0; r < row; r++) {
-            for (char[] chars : board) {
-                if (chars[r] == '.') {
+        for (char[] chars : board) {
+            for (int c = 0; c < col; c++) {
+                if (chars[c] == '.') {
                     return false;
                 }
             }
@@ -200,33 +150,38 @@ public class Board {
         return true;
     }
 
-
-    public void play(char[][] board) {
-        char player1 = PLAYERS[0];
-        char player2 = PLAYERS[1];
-
-        char turn = ' ';
-
-        while (!checkFull(board) || !checkWin(board,turn)) {
-            printBoard(board);
-            if (turn == player1) {
-                makeTurn(board, player1);
-                if (checkWin(board,player1)) {
-                    printBoard(board);
-                    System.out.println("Player " + turn + " won!");
-                    break;
-                }
-                turn = player2;
-            } else {
-                makeTurn(board, player2);
-                if (checkWin(board,player2)) {
-                    printBoard(board);
-                    System.out.println("Player " + turn + " won!");
-                    break;
-                }
-                turn = player1;
-            }
-        }
+    public void insert(char[][] board, char player, int column) {
+        int row = returnLowest(board, column);
+        board[row][column] = player;
     }
 
+    public void playGame() {
+        char[][] board = fillBoard();
+        Scanner scanner = new Scanner(System.in);
+        int column = 0;
+        char player = PLAYERS[0];
+
+        while (!checkWin(board, player) && !checkDraw(board)) {
+            printBoard(board);
+            System.out.println("Player " + player + " turn");
+            System.out.print("Enter column number: ");
+            column = scanner.nextInt() - 1;
+            if (isFull(board, column)) {
+                System.out.println("Column full, try again");
+            } else {
+                insert(board, player, column);
+                if (player == PLAYERS[0]) {
+                    player = PLAYERS[1];
+                } else {
+                    player = PLAYERS[0];
+                }
+            }
+        }
+        printBoard(board);
+        if (checkWin(board, player)) {
+            System.out.println("Player " + player + " wins!");
+        } else {
+            System.out.println("Draw!");
+        }
+    }
 }
