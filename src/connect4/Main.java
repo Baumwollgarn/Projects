@@ -1,7 +1,5 @@
 package connect4;
 
-import java.util.Arrays;
-
 public class Main {
     public static void main(String[] args) {
 
@@ -9,7 +7,7 @@ public class Main {
 
         char[][] play = game.fillBoard();
 
-        game.play(play,'Y','R');
+        game.play(play);
 
     }
 }
