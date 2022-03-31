@@ -52,8 +52,100 @@ public class Board {
         Scanner in = new Scanner(System.in);
         System.out.print("Enter a column (1-7): ");
         int nextTurn = in.nextInt();
-
         board[nextTurn][checkLowest(board)] = player;
+    }
+
+    /** Method to check if 4 in a row */
+    public boolean checkWin(char[][] board, char player) {
+        int col = board.length;
+        int row = board[0].length;
+
+        for (int r = 0; r < row; r++) {
+            for (int c = 0; c < col; c++) {
+                if (board[c][r] == player) {
+                    if (checkHorizontal(board, player, r, c)) {
+                        return true;
+                    }
+                    if (checkVertical(board, player, r, c)) {
+                        return true;
+                    }
+                    if (checkDiagonal(board, player, r, c)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /** Method to check horizontal */
+    public boolean checkHorizontal(char[][] board, char player, int row, int col) {
+        if (col + 3 < board.length) {
+            if (board[col][row] == player && board[col + 1][row] == player && board[col + 2][row] == player && board[col + 3][row] == player) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Method to check vertical */
+    public boolean checkVertical(char[][] board, char player, int row, int col) {
+        if (row + 3 < board[0].length) {
+            if (board[col][row] == player && board[col][row + 1] == player && board[col][row + 2] == player && board[col][row + 3] == player) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Method to check diagonal */
+    public boolean checkDiagonal(char[][] board, char player, int row, int col) {
+        if (row + 3 < board[0].length && col + 3 < board.length) {
+            if (board[col][row] == player && board[col + 1][row + 1] == player && board[col + 2][row + 2] == player && board[col + 3][row + 3] == player) {
+                return true;
+            }
+        }
+        if (row + 3 < board[0].length && col - 3 >= 0) {
+            if (board[col][row] == player && board[col - 1][row + 1] == player && board[col - 2][row + 2] == player && board[col - 3][row + 3] == player) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Method to check if board is full */
+    public boolean checkFull(char[][] board) {
+        int col = board.length;
+        int row = board[0].length;
+
+        for (int r = 0; r < row; r++) {
+            for (int c = 0; c < col; c++) {
+                if (board[c][r] == '.') {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /** Method to check if the game is won */
+    public boolean isWon(char[][] board) {
+        int col = board.length;
+        int row = board[0].length;
+
+        for (int r = 0; r < row; r++) {
+            for (int c = 0; c < col; c++) {
+                if (board[c][r] == '.') {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
+    public void play (char[][] board, char player1 , char player2) {
 
     }
+
 }
