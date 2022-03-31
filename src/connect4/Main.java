@@ -9,8 +9,7 @@ public class Main {
 
         char[][] play = game.fillBoard();
 
-        game.printBoard(play);
-
+        game.play(play,'Y','R');
 
     }
 }

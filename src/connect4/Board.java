@@ -14,17 +14,23 @@ public class Board {
     public char[][] fillBoard() {
         board = new char[width][height];
 
-        for (int i = 0; i < height; i++) {
-            Arrays.fill(board[i] = new char[width], '.');
+        int col = board[0].length;
+        int row = board.length;
+
+        for (int r = 0; r < row ; r++) {
+            for (int c = 0; c < col; c++) {
+                board[r][c] = '.';
+            }
         }
+
         return board;
     }
 
     public void printBoard(char[][] board) {
-        int col = board.length;
-        int row = board[0].length;
+        int col = board[0].length;
+        int row = board.length;
 
-        for (int r = 0; r < row - 1 ; r++) {
+        for (int r = 0; r < row ; r++) {
             for (int c = 0; c < col; c++) {
                 System.out.print(board[r][c]);
             }
@@ -32,27 +38,50 @@ public class Board {
         }
     }
 
-    public int checkLowest(char[][] board) {
-        /** Check lowest row for empty space */
-        int col = board.length;
-        int row = board[0].length;
+    /*public int checkLowest(char[][] board) {
 
-        for (int r = 0; r < row; r++) {
+        int col = board[0].length;
+        int row = board.length;
+
+        for (int r = 0 ; r < row; r++) {
             for (int c = 0; c < col; c++) {
-                if (board[c][r] == '.') {
+                if (board[r][c] == 'Y' || board[r][c] == 'R') {
                     return r;
                 }
             }
         }
-        return -1;
+        return 0;
+    }*/
+
+    /*
+    Method column full
+    Method insert from below till find a empty space
+     */
+
+    public boolean isFull (char[][] board, int column) {
+        for (int c = 0; c < board.length; c++ ){
+            if (board[column][c] == '.') return false;
+        }
+        return true;
+    }
+
+    public int returnLowest(char[][] board, int column) {
+        int lowest = board[0].length;
+        for (int c = lowest; c > 0; c--){
+            if (board[c][column] == 'Y' || board[c][column] == 'R') {
+                lowest = c - 1;
+            }
+        }
+        return lowest;
     }
 
     public void makeTurn(char[][] board, char player) {
 
         Scanner in = new Scanner(System.in);
-        System.out.print("Enter a column (1-7): ");
-        int nextTurn = in.nextInt();
-        board[nextTurn][checkLowest(board)] = player;
+        System.out.print("Enter a column (1-6): ");
+        int nextTurn = in.nextInt() - 1;
+        isFull(board,nextTurn);
+        board[returnLowest(board,nextTurn)][nextTurn] = player;
     }
 
     /** Method to check if 4 in a row */
@@ -60,7 +89,7 @@ public class Board {
         int col = board.length;
         int row = board[0].length;
 
-        for (int r = 0; r < row; r++) {
+        for (int r = 0; r < row -1; r++) {
             for (int c = 0; c < col; c++) {
                 if (board[c][r] == player) {
                     if (checkHorizontal(board, player, r, c)) {
@@ -128,24 +157,26 @@ public class Board {
         return true;
     }
 
-    /** Method to check if the game is won */
-    public boolean isWon(char[][] board) {
-        int col = board.length;
-        int row = board[0].length;
-
-        for (int r = 0; r < row; r++) {
-            for (int c = 0; c < col; c++) {
-                if (board[c][r] == '.') {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
 
     public void play (char[][] board, char player1 , char player2) {
+        player1 = PLAYERS[0];
+        player2 = PLAYERS[1];
 
+        char turn = ' ';
+
+        while (!checkWin(board,player1) || !checkWin(board,player2) || !checkFull(board)) {
+            if (turn == player1) {
+                printBoard(board);
+                makeTurn(board, player1);
+                turn = player2;
+            } else {
+                printBoard(board);
+                makeTurn(board, player2);
+                turn = player1;
+            }
+        }
+
+        System.out.println("Player " + turn + " won!");
     }
 
 }
