@@ -5,8 +5,6 @@ public class Main {
 
         Board game = new Board();
 
-        char[][] play = game.fillBoard();
-
         game.playGame();
 
     }

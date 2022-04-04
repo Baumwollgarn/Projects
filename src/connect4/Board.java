@@ -5,8 +5,6 @@ import java.util.Scanner;
 public class Board {
     private final char[] PLAYERS = {'O', 'X'};
 
-    //private int lastCol = -1, lastRow = -1;
-
     public char[][] fillBoard() {
         int width = 7;
         int height = 6;
@@ -25,17 +23,16 @@ public class Board {
     }
 
     public static void printBoard(char[][] board){
-        System.out.println(" 0 1 2 3 4 5 6");
-        System.out.println("---------------");
-        for (int row = 0; row < board.length; row++){
+        System.out.println(" 1 2 3 4 5 6");
+        for (char[] chars : board) {
             System.out.print("|");
-            for (int col = 0; col < board[0].length; col++){
-                System.out.print(board[row][col]);
+            for (int col = 0; col < board[0].length; col++) {
+                System.out.print(chars[col]);
                 System.out.print("|");
             }
             System.out.println();
         }
-        System.out.println(" 0 1 2 3 4 5 6");
+        System.out.println(" 1 2 3 4 5 6");
         System.out.println();
     }
 
@@ -70,7 +67,7 @@ public class Board {
         for (int r = 0; r < row; r++) {
             for (int c = 0; c < col; c++) {
                 if (board[r][c] == player) {
-                    if (checkHorizontal(board, r, c, player) || checkVertical(board, r, c, player) || checkDiagonal(board, player)) {
+                    if (checkHorizontal(board, r, player) || checkVertical(board, r, c, player) || checkDiagonal(board, player)) {
                         return true;
                     }
                 }
@@ -79,7 +76,7 @@ public class Board {
         return false;
     }
 
-    public boolean checkHorizontal(char[][] board, int row, int column, char player) {
+    public boolean checkHorizontal(char[][] board, int row, char player) {
         int count = 0;
         int col = board[0].length;
 
@@ -114,7 +111,6 @@ public class Board {
     }
 
     public boolean checkDiagonal(char[][] board, char player) {
-        //check upward diagonal
         for(int row = 3; row < board.length; row++){
             for(int col = 0; col < board[0].length - 3; col++){
                 if (board[row][col] == player   &&
@@ -125,7 +121,6 @@ public class Board {
                 }
             }
         }
-        //check downward diagonal
         for(int row = 0; row < board.length - 3; row++){
             for(int col = 0; col < board[0].length - 3; col++){
                 if (board[row][col] == player   &&
@@ -160,7 +155,7 @@ public class Board {
     public void playGame() {
         char[][] board = fillBoard();
         Scanner scanner = new Scanner(System.in);
-        int column = 0;
+        int column;
         char player = PLAYERS[0];
 
         while (!checkWin(board, player) && !checkDraw(board)) {
