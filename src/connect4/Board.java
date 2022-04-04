@@ -3,7 +3,7 @@ package connect4;
 import java.util.Scanner;
 
 public class Board {
-    private final char[] PLAYERS = {'Y', 'R'};
+    private final char[] PLAYERS = {'O', 'X'};
 
     //private int lastCol = -1, lastRow = -1;
 
@@ -24,15 +24,19 @@ public class Board {
         return board;
     }
 
-    public void printBoard(char[][] board) {
-        int col = board[0].length;
-
-        for (char[] chars : board) {
-            for (int c = 0; c < col; c++) {
-                System.out.print(chars[c]);
+    public static void printBoard(char[][] board){
+        System.out.println(" 0 1 2 3 4 5 6");
+        System.out.println("---------------");
+        for (int row = 0; row < board.length; row++){
+            System.out.print("|");
+            for (int col = 0; col < board[0].length; col++){
+                System.out.print(board[row][col]);
+                System.out.print("|");
             }
             System.out.println();
         }
+        System.out.println(" 0 1 2 3 4 5 6");
+        System.out.println();
     }
 
     /*
@@ -51,7 +55,7 @@ public class Board {
         int lowest = board[0].length;
         if (!isFull(board, column)) {
             for (int c = lowest; c > 0; c--) {
-                if (board[c][column] == 'Y' || board[c][column] == 'R') {
+                if (board[c][column] == PLAYERS[0] || board[c][column] == PLAYERS[1]) {
                     lowest = c - 1;
                 }
             }
@@ -66,7 +70,7 @@ public class Board {
         for (int r = 0; r < row; r++) {
             for (int c = 0; c < col; c++) {
                 if (board[r][c] == player) {
-                    if (checkHorizontal(board, r, c, player) || checkVertical(board, r, c, player) || checkDiagonal(board, r, c, player)) {
+                    if (checkHorizontal(board, r, c, player) || checkVertical(board, r, c, player) || checkDiagonal(board, player)) {
                         return true;
                     }
                 }
@@ -109,29 +113,27 @@ public class Board {
         return false;
     }
 
-    public boolean checkDiagonal(char[][] board, int row, int column, char player) {
-        int count = 0;
-        int rowLength = board.length;
-        int colLength = board[0].length;
-
-        for (int r = row, c = column; r < rowLength && c < colLength; r++, c++) {
-            if (board[r][c] == player) {
-                count++;
-            } else {
-                count = 0;
-            }
-            if (count == 4) {
-                return true;
+    public boolean checkDiagonal(char[][] board, char player) {
+        //check upward diagonal
+        for(int row = 3; row < board.length; row++){
+            for(int col = 0; col < board[0].length - 3; col++){
+                if (board[row][col] == player   &&
+                        board[row-1][col+1] == player &&
+                        board[row-2][col+2] == player &&
+                        board[row-3][col+3] == player){
+                    return true;
+                }
             }
         }
-        for (int r = row, c = column; r >= 0 && c >= 0; r--, c--) {
-            if (board[r][c] == player) {
-                count++;
-            } else {
-                count = 0;
-            }
-            if (count == 4) {
-                return true;
+        //check downward diagonal
+        for(int row = 0; row < board.length - 3; row++){
+            for(int col = 0; col < board[0].length - 3; col++){
+                if (board[row][col] == player   &&
+                        board[row+1][col+1] == player &&
+                        board[row+2][col+2] == player &&
+                        board[row+3][col+3] == player){
+                    return true;
+                }
             }
         }
         return false;
