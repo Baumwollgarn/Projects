@@ -41,11 +41,16 @@ public class Board {
     Method inserts from below till find an empty space
      */
 
-    public boolean isFull(char[][] board, int column) {
+    /* public boolean isFull(char[][] board, int column) {
         for (int c = 0; c < board.length; c++) {
-            if (board[column][c] == '.') return false;
+            if (board[column][c] == PLAYERS[1] || board[column][c] != PLAYERS[0]) return false;
         }
         return true;
+    } */
+
+
+    public boolean isFull(char[][] board, int column) {
+        return board[0][column] == PLAYERS[0] || board[0][column] == PLAYERS[1];
     }
 
     public int returnLowest(char[][] board, int column) {
