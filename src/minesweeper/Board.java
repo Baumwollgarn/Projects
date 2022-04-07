@@ -3,18 +3,18 @@ package minesweeper;
 import java.util.Scanner;
 
 public class Board {
-    /** Two dimensional array of cells. */
-    private Cell[][] cells;
+    /** Two-dimensional array of cells. */
+    private final Cell[][] cells;
     /** Number of rows. */
-    private int rows;
+    private final int rows;
     /** Number of columns. */
-    private int columns;
+    private final int columns;
     /** Number of mines. */
-    private int mines;
+    private final int mines;
     /** Number of cells revealed. */
     private int revealed;
     /** Number of cells flagged. */
-    private int flagged;
+    private final int flagged;
 
     /**
      * Constructor.
@@ -72,20 +72,6 @@ public class Board {
         }
     }
 
-    /**
-     * Method to reveal cell.
-     * @param row row of cell
-     * @param column column of cell
-     */
-    public void revealCell(int row, int column) {
-        if (cells[row][column].isMine()) {
-            cells[row][column].setRevealed();
-            revealAll();
-        } else {
-            revealCell(row, column);
-        }
-    }
-
     /** Method to reveal all cells. */
     private void revealAll() {
         for (int i = 0; i < rows; i++) {
@@ -98,37 +84,6 @@ public class Board {
     /** Method to set revealed. */
     public void setRevealed() {
         revealed++;
-    }
-
-    /** Method to let user choose to flag or unflag cell. */
-    public void flagCell(int row, int column) {
-        if (cells[row][column].isFlagged()) {
-            cells[row][column].setUnflagged();
-            flagged--;
-        } else {
-            cells[row][column].setFlagged();
-            flagged++;
-        }
-    }
-
-    /** Method to get number of mines. */
-    public int getMines() {
-        return mines;
-    }
-
-    /** Method to get number of cells revealed. */
-    public int getRevealed() {
-        return revealed;
-    }
-
-    /** Method to get number of cells flagged. */
-    public int getFlagged() {
-        return flagged;
-    }
-
-    /** Method to get cell. */
-    public Cell getCell(int row, int column) {
-        return cells[row][column];
     }
 
     /** Method to get number of cells. */
@@ -181,8 +136,8 @@ public class Board {
         System.out.println("2. Quit");
         int choice = input.nextInt();
         if (choice == 1) {
-                int row = 0;
-                int column = 0;
+                int row;
+                int column;
                 while (getNumberOfMinesLeft() > 0) {
                     printBoard();
                     System.out.println("Enter row and column of cell: ");
