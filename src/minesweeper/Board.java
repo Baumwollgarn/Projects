@@ -100,19 +100,15 @@ public class Board {
         revealed++;
     }
 
-    /** Method to set flagged. */
-    public void setFlagged() {
-        flagged++;
-    }
-
-    /** Method to get number of rows. */
-    public int getRows() {
-        return rows;
-    }
-
-    /** Method to get number of columns. */
-    public int getColumns() {
-        return columns;
+    /** Method to let user choose to flag or unflag cell. */
+    public void flagCell(int row, int column) {
+        if (cells[row][column].isFlagged()) {
+            cells[row][column].setUnflagged();
+            flagged--;
+        } else {
+            cells[row][column].setFlagged();
+            flagged++;
+        }
     }
 
     /** Method to get number of mines. */
@@ -165,11 +161,6 @@ public class Board {
         return getNumberOfMines() - getNumberOfFlagged();
     }
 
-    /** Method to get number of cells left. */
-    public int getNumberOfCellsLeft(int row, int column) {
-        return getNumberOfCellsLeft() - getCell(row, column).getNumber();
-    }
-
     /** Method to print the board and each cell. */
     public void printBoard() {
         for (int i = 0; i < rows; i++) {
@@ -184,37 +175,62 @@ public class Board {
     /** method to play game. */
     public void playGame() {
         Scanner input = new Scanner(System.in);
-        int row = 0;
-        int column = 0;
-        while (getNumberOfMinesLeft() > 0) {
-            printBoard();
-            System.out.println("Enter row and column of cell: ");
-            row = input.nextInt();
-            column = input.nextInt();
-            if (row >= 0 && row < rows && column >= 0 && column < columns) {
-                if (cells[row][column].isRevealed()) {
-                    System.out.println("Cell is already revealed.");
-                } else if (cells[row][column].isFlagged()) {
-                    System.out.println("Cell is already flagged.");
-                } else {
-                    if (cells[row][column].isMine()) {
-                        System.out.println("You lose.");
-                        revealAll();
-                        printBoard();
-                        System.exit(0);
-                    } else {
-                        cells[row][column].setRevealed();
-                        setRevealed();
-                        revealAllToNextNumber(column, row);
-                        if (getNumberOfCellsLeft() == getNumberOfMinesLeft()) {
-                            System.out.println("You win.");
-                            revealAll();
+        System.out.println("Welcome to Minesweeper!");
+        System.out.println("What do you want to do?");
+        System.out.println("1. Play");
+        System.out.println("2. Quit");
+        int choice = input.nextInt();
+        if (choice == 1) {
+                int row = 0;
+                int column = 0;
+                while (getNumberOfMinesLeft() > 0) {
+                    printBoard();
+                    System.out.println("Enter row and column of cell: ");
+                    row = input.nextInt();
+                    column = input.nextInt();
+                    System.out.println("What do you want to do?");
+                    System.out.println("1. Reveal");
+                    System.out.println("2. Flag");
+                    choice = input.nextInt();
+                    if (choice == 1) {
+                        if (row >= 0 && row < rows && column >= 0 && column < columns) {
+                            if (cells[row][column].isRevealed()) {
+                                System.out.println("Cell is already revealed.");
+                            } else if (cells[row][column].isFlagged()) {
+                                System.out.println("Cell is flagged and can't be revealed.");
+                            } else {
+                                if (cells[row][column].isMine()) {
+                                    System.out.println("You lose.");
+                                    revealAll();
+                                    printBoard();
+                                    System.exit(0);
+                                } else {
+                                    cells[row][column].setRevealed();
+                                    setRevealed();
+                                    revealAllToNextNumber(column, row);
+                                    if (getNumberOfCellsLeft() == getNumberOfMinesLeft()) {
+                                        System.out.println("You win.");
+                                        revealAll();
+                                        System.exit(0);
+                                    }
+                                }
+                            }
+                        } else {
+                            System.out.println("Invalid input.");
+                        }
+                    } else if (choice == 2) {
+                        if (cells[row][column].isFlagged()) {
+                            System.out.println("Cell is already flagged and will now be unflagged");
+                            cells[row][column].setUnflagged();
+                        } else {
+                            cells[row][column].setFlagged();
                         }
                     }
                 }
-            } else {
-                System.out.println("Invalid input.");
-            }
+        }
+        if (choice == 2) {
+            System.out.println("Goodbye!");
+            System.exit(0);
         }
     }
 

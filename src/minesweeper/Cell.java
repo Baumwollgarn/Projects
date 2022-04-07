@@ -6,6 +6,7 @@ public class Cell {
     private boolean isMine;
     private int number;
     private boolean revealed;
+    private boolean flagged;
 
     public Cell(int x, int y) {
         this.x = x;
@@ -13,6 +14,7 @@ public class Cell {
         this.isMine = false;
         this.number = 0;
         this.revealed = false;
+        this.flagged = false;
     }
 
     public void setMine() {
@@ -23,20 +25,26 @@ public class Cell {
         this.number = number;
     }
 
-    /** Method to print the cell.
-     * @return*/
+    /**
+     * Method to print the cell.
+     *
+     * @return
+     */
 
     public void printCell() {
 
-         if (this.revealed) {
-             if (isMine) {
-                 System.out.print(" * ");
-             } else {
-                 System.out.print(" " + number + " ");
-             }
-         } else {
-             System.out.print("[ ]");
-         }
+        if (this.revealed) {
+            if (isMine) {
+                System.out.print(" * ");
+            } else {
+                System.out.print(" " + number + " ");
+            }
+        } else if (this.flagged) {
+            System.out.print(" F ");
+        } else {
+            System.out.print("[ ]");
+        }
+
     }
 
     public int getX() {
@@ -59,6 +67,14 @@ public class Cell {
         this.isMine = false;
     }
 
+    public void setFlagged() {
+        this.flagged = true;
+    }
+
+    public void setUnflagged() {
+        this.flagged = false;
+    }
+
     public int getNumber() {
         return number;
     }
@@ -68,7 +84,7 @@ public class Cell {
     }
 
     public boolean isFlagged() {
-        return false;
+        return flagged;
     }
 
 
