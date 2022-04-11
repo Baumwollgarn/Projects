@@ -1,6 +1,6 @@
 package battleship;
 
-public class Ship {
+public class Battleship {
     private int size;
     private int hits;
     private boolean sunk;
@@ -8,13 +8,23 @@ public class Ship {
     private int x;
     private int y;
 
-    public Ship(int size, int x, int y, boolean horizontal) {
+    public Battleship(int size, int x, int y, boolean horizontal) {
         this.size = size;
         this.x = x;
         this.y = y;
         this.horizontal = horizontal;
         this.hits = 0;
         this.sunk = false;
+    }
+
+    public static int readInt(String s) {
+        int i = 0;
+        try {
+            i = Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input");
+        }
+        return i;
     }
 
     public int getSize() {
@@ -67,6 +77,28 @@ public class Ship {
 
     public void setSize(int size) {
         this.size = size;
+    }
+
+    public boolean isHit(int x, int y) {
+        if (this.horizontal) {
+            return this.x == x && this.y == y;
+        } else {
+            return this.x == x && this.y == y;
+        }
+    }
+
+    /** Readstring
+     *
+     */
+    public static String readString(String prompt) {
+        String s = "";
+        System.out.print(prompt);
+        try {
+            s = System.console().readLine();
+        } catch (Exception e) {
+            System.out.println("Invalid input");
+        }
+        return s;
     }
 
 
