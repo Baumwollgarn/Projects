@@ -35,31 +35,18 @@ public class Tile {
         return left == right;
     }
 
-    public boolean isLeftDouble() {
-        return left == right;
+    public void printHorizontalTile(Tile tile) {
+        System.out.println("*********");
+        System.out.println("* " + tile.getLeft() + " | " + tile.getRight() + " *");
+        System.out.println("*********");
     }
 
-    public boolean isRightDouble() {
-        return left == right;
+    public void printVerticalTile(Tile tile) {
+        System.out.println("*****");
+        System.out.println("* " + tile.getLeft() + " *");
+        System.out.println("* - *");
+        System.out.println("* " + tile.getRight() + " *");
+        System.out.println("*****");
     }
 
-    public boolean isLeftDouble(int left) {
-        return left == right;
-    }
-
-    public boolean isRightDouble(int right) {
-        return left == right;
-    }
-
-    public boolean isLeftDouble(Tile tile) {
-        return left == right;
-    }
-
-    public boolean isRightDouble(Tile tile) {
-        return left == right;
-    }
-
-    public boolean isLeftDouble(int left, int right) {
-        return left == right;
-    }
 }
