@@ -28,6 +28,9 @@ public class Player {
         this.score = score;
     }
 
+    public void addScore(int score) {
+        this.score += score;
+    }
     public void addTile(Tile tile) {
         this.hand.addTile(tile);
     }

@@ -39,9 +39,12 @@ public class Game {
     public void play() {
         while (!gameOver) {
             player1.takeTurn(player2);
+            printBoard(player1);
             player2.takeTurn(player1);
+            printBoard(player2);
         }
     }
+
 
     /** Method to check if the game is over */
     public boolean gameOver() {
@@ -49,9 +52,9 @@ public class Game {
     }
 
     /** Method to print the game board */
-    public void printBoard() {
-        player1.printBoard();
-        player2.printBoard();
+    public void printBoard(Player player) {
+        if (player == player1) player1.printBoard();
+        if (player == player2) player2.printBoard();
     }
 
     /** Method to print the game status */

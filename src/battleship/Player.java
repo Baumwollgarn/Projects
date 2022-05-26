@@ -127,10 +127,13 @@ public class Player {
 
     /** Method to take turn */
     public void takeTurn(Player opponent) {
+        Scanner jose = new Scanner(System.in);
         System.out.println("\n" + this.name + "'s turn");
         System.out.println("Enter coordinates to fire at: ");
-        int x = Battleship.readInt("x: ");
-        int y = Battleship.readInt("y: ");
+        System.out.println("x: ");
+        int x = jose.nextInt();
+        System.out.println("y: ");
+        int y = jose.nextInt();
         if (opponent.takeShot(x - 1, y - 1)) {
             System.out.println("Hit!");
         } else {
@@ -145,7 +148,8 @@ public class Player {
         System.out.println("Enter coordinates to place ship: ");
         int x = julio.nextInt();
         int y = julio.nextInt();
-        int orientation = Battleship.readInt("Orientation (1 = horizontal, 2 = vertical): ");
+        System.out.println("Orientation (1 = horizontal, 2 = vertical): ");
+        int orientation = julio.nextInt();
         if (orientation == 1) {
             for (int i = 0; i < 5; i++) {
                 this.board[x - 1][y - 1] = 1;
