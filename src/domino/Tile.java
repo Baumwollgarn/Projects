@@ -49,4 +49,12 @@ public class Tile {
         System.out.println("*****");
     }
 
+    // Print simple tile
+    public void printTile() {
+        System.out.println(left + " | " + right);
+    }
+
+    public Tile get(int tileIndex) {
+        return this;
+    }
 }

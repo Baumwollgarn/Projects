@@ -1,5 +1,7 @@
 package domino;
 
+import battleship.Board;
+
 import java.util.ArrayList;
 
 public class Hand {
@@ -20,8 +22,20 @@ public class Hand {
 
     public void printHand() {
         for (Tile tile : this.hand) {
-            tile.printVerticalTile(tile);
+            tile.printTile();
         }
     }
 
+    public ArrayList<Tile> getHand() {
+        return this.hand;
+    }
+
+    public int getIndexOf6Double() {
+        for (int i = 0; i < this.hand.size(); i++) {
+            if (this.hand.get(i).isDouble() && this.hand.get(i).getLeft() == 6) {
+                return i;
+            }
+        }
+        return 0;
+    }
 }

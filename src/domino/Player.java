@@ -12,6 +12,9 @@ public class Player {
         this.score = 0;
     }
 
+    public static void removeScore(int i) {
+    }
+
     public String getName() {
         return this.name;
     }
