@@ -51,10 +51,21 @@ public class Tile {
 
     // Print simple tile
     public void printTile() {
-        System.out.println(left + " | " + right);
+        System.out.print("[" + left + " | " + right + "]");
+        System.out.print(" - ");
     }
 
     public Tile get(int tileIndex) {
         return this;
     }
+
+    public void switchSides(Tile tile1) {
+        int temp = tile1.getLeft();
+        tile1.setLeft(tile1.getRight());
+        tile1.setLeft(temp);
+        temp = tile1.getRight();
+        tile1.setRight(tile1.getLeft());
+        tile1.setRight(temp);
+    }
+
 }

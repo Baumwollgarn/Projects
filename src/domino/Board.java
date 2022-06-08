@@ -35,6 +35,23 @@ public class Board {
         }
     }
 
+    //Method to add random tiles from stack till the hand is full
+    public static void addRandomTiles(ArrayList<Tile> tiles, Hand hand, int handSize) {
+        for (int i = 0; i < handSize; i++) {
+            int randomIndex = (int) (Math.random() * tiles.size());
+            hand.addTile(tiles.get(randomIndex));
+            tiles.remove(randomIndex);
+        }
+    }
+
+    public static void addOneRandomTiles(ArrayList<Tile> tiles, Hand hand) {
+        int randomIndex = (int) (Math.random() * tiles.size());
+        hand.addTile(tiles.get(randomIndex));
+        tiles.remove(randomIndex);
+    }
+
+    // Method to check every tile in the hand and check if any is playable on the board
+
     public static void play() {
         ArrayList<Tile> tiles = createTiles();
         Player player1 = new Player("Player 1");
@@ -46,14 +63,14 @@ public class Board {
         Player currentPlayer;
         Hand starter = highestTileOnHand(hand1, hand2);
         if (starter.equals(hand1)) {
-            System.out.println("Player 1 starts and start withs the 6:6");
+            System.out.println("Player 1 starts and start withs the highest tile.");
             board.add(hand1.getHand().get(hand1.getIndexOf6Double()));
             hand1.removeTile(hand1.getHand().get(hand1.getIndexOf6Double()));
             for (Tile t : hand1.getHand()) t.printTile();
             printTiles(board);
             currentPlayer = player2;
         } else {
-            System.out.println("Player 2 starts and starts with the 6:6");
+            System.out.println("Player 2 starts and starts with the highest tile.");
             board.add(hand2.getHand().get(hand1.getIndexOf6Double()));
             hand2.removeTile(hand2.getHand().get(hand2.getIndexOf6Double()));
             for (Tile t : hand2.getHand()) t.printTile();
@@ -71,39 +88,45 @@ public class Board {
             Scanner scanner = new Scanner(System.in);
             int tileIndex = scanner.nextInt();
             Tile tile = currentPlayer.getHand().getHand().get(tileIndex);
-            if (tile.isDouble()) {
-                if (tile.getLeft() == 6) {
-                    board.add(tile);
-                    currentPlayer.getHand().removeTile(tile);
-                    printTiles(board);
-                    currentPlayer = player2;
-                } else {
-                    System.out.println("You can't play this tile");
-                }
-            } else {
-                if (board.size() == 0) {
-                    board.add(tile);
-                    currentPlayer.getHand().removeTile(tile);
-                    printTiles(board);
-                    currentPlayer = player1;
-                } else {
-                    if (board.get(board.size() - 1).getRight() == tile.getLeft() || board.get(board.size() - 1).getLeft() == tile.getRight()) {
-                        board.add(tile);
-                        currentPlayer.getHand().removeTile(tile);
-                        printTiles(board);
-                        currentPlayer = player2;
-                    } else {
-                        System.out.println("You can't play this tile");
-                    }
-                }
+            // Check if any tile of the hand is playable and if not, remove a tile from the stack and add it to the hand
+            if (!isPlayable(tile)) {
+                System.out.println("You can't play this tile");
+                System.out.println("You have to remove a tile from the stack");
+                addOneRandomTiles(tiles, currentPlayer.getHand());
+                tiles.remove(0);
+                continue;
             }
+            checkIfPlayedTilesMatch(tile);
+            currentPlayer.getHand().removeTile(tile);
+
+            // Check if the game is over
             if (currentPlayer.getHand().getHand().size() == 0) {
-                System.out.println("You have no more tiles");
+                System.out.println("Game is over");
+                System.out.println("The winner is " + currentPlayer.getName());
                 gameIsOver = true;
             }
+
         }
     }
 
+    // Method to check if a tile is playable on the current board situation. If not, the player has to remove a tile from the stack and add it to the hand.
+    public static boolean isPlayable(Tile tile) {
+        if (board.size() == 0) {
+            return true;
+        } else if (board.get(0).getLeft() == tile.getLeft()) {
+            return true;
+        } else if (board.get(0).getLeft() == tile.getRight()) {
+            return true;
+        } else if (board.get(board.size() - 1).getRight() == tile.getLeft()) {
+            return true;
+        } else return board.get(board.size() - 1).getRight() == tile.getRight();
+    }
+
+    public static void switchSides(Tile tile) {
+        int temp = tile.getLeft();
+        tile.setLeft(tile.getRight());
+        tile.setRight(temp);
+    }
     public static void addTileToBoard(Tile tile) {
         // Get the left and right values of the last tile on the board
         int left = board.get(board.size() - 1).getLeft();
@@ -112,12 +135,33 @@ public class Board {
         if (tile.isDouble()) {
             board.add(tile);
         }
-        // If the tile is not a double, add it to the board if it matches the left or right value of the last tile on the board
+        /* If the tile is not a dobule but is playable, add it to either the last
+        position of the board or the first position, depending on the left and right values of the last tile on the board */
         else if (tile.getLeft() == left || tile.getRight() == right) {
             board.add(tile);
+        } else {
+            board.add(0, tile);
         }
     }
 
+    // Method to check if played tiles number matches the number of the first or last tile on the board. If so, add the tile to the board. If not swap the numbers of the tiles.
+    public static void checkIfPlayedTilesMatch(Tile tile) {
+        if (board.size() == 0) {
+            board.add(tile);
+        } else {
+            if (board.get(0).getLeft() == tile.getRight()) {
+                board.add(0, tile);
+            } else if (board.get(0).getLeft() == tile.getLeft()) {
+                switchSides(tile);
+                board.add(0, tile);
+            } else if (board.get(board.size() - 1).getRight() == tile.getLeft()){
+                board.add(tile);
+            } else if (board.get(board.size() - 1).getRight() == tile.getRight()) {
+                switchSides(tile);
+                board.add(tile);
+            }
+        }
+    }
     public static Hand highestTileOnHand(Hand hand1, Hand hand2) {
         Hand handStart = null;
 
